@@ -28,6 +28,7 @@ const erweiterFieldsEl = el('erweiterFields');
 const erweiterToggleEl = el('erweiterToggle');
 
 let activeFormat = 'tile';
+let splitSelected = false;
 
 let loadedBytes = null;
 let loadedName = 'input.pdf';
@@ -158,8 +159,8 @@ async function handleSelectedFile(f) {
     loadedBytes = await f.arrayBuffer();
     await loadPdfLib(); // warm-up
     setFileInfo(`Geladen: ${loadedName}`, 'ok');
-    generateBtn.disabled = false;
-    setStatus('Bereit.');
+    generateBtn.disabled = !splitSelected;
+    setStatus(splitSelected ? 'Bereit.' : 'Aufteilung auswählen.');
   } catch (e) {
     console.error(e);
     setFileInfo('Konnte PDF nicht laden oder Bibliothek nicht initialisieren.', 'err');
@@ -191,6 +192,9 @@ document.querySelectorAll('.pill[data-preset]').forEach(btn => {
     splitCustomEl.classList.toggle('open', isCustom);
     btn.setAttribute('aria-expanded', String(isCustom));
     if (isCustom) { rowsEl.focus(); rowsEl.select(); }
+
+    splitSelected = true;
+    if (loadedBytes) { generateBtn.disabled = false; setStatus('Bereit.'); }
   });
 });
 
