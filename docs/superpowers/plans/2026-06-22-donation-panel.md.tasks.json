@@ -1,0 +1,19 @@
+{
+  "planPath": "docs/superpowers/plans/2026-06-22-donation-panel.md",
+  "tasks": [
+    {
+      "id": 0,
+      "subject": "Task 1: HTML + CSS — Donate Panel Markup and Styles",
+      "status": "pending",
+      "description": "**Goal:** Add the donate panel to index.html and its styles to style.css so it renders correctly in all three states (hidden / countdown / done).\n\n**Files:**\n- Modify: `index.html` (after `.button-row` div, before `#status` div — around line 119)\n- Modify: `style.css` (append at end)\n\n**Acceptance Criteria:**\n- [ ] `#donate-panel` exists in DOM, hidden by default (`hidden` attribute)\n- [ ] Panel contains `#donate-bar`, `#donate-countdown`, and `<a>` to https://ko-fi.com/simonfieber\n- [ ] Ko-Fi link has `target=\"_blank\" rel=\"noopener noreferrer\"`\n- [ ] `.donate-panel--done` class hides `.donate-text`, `.donate-bar-track`, `.donate-countdown`\n- [ ] Panel fits visually within the left card\n\n**Verify:** Open index.html in browser. Panel invisible. DevTools: `document.getElementById('donate-panel').hidden` → `true`.\n\n```json:metadata\n{\"files\": [\"index.html\", \"style.css\"], \"verifyCommand\": \"open index.html\", \"acceptanceCriteria\": [\"#donate-panel hidden by default\", \"Ko-Fi link present with noopener noreferrer\", \".donate-panel--done hides text/bar/countdown\"], \"modelTier\": \"mechanical\"}\n```"
+    },
+    {
+      "id": 1,
+      "subject": "Task 2: JS Wiring — Countdown Logic and Panel Reset",
+      "status": "pending",
+      "blockedBy": [0],
+      "description": "**Goal:** Wire `startDonationCountdown()` into app.js so the panel runs a 5-second countdown after PDF generation, then reveals the download button, and resets when a new file is loaded.\n\n**Files:**\n- Modify: `app.js` (add function; replace line 380; add reset in handleSelectedFile)\n\n**Acceptance Criteria:**\n- [ ] After clicking generate, donate panel appears and countdown runs 5 → 0\n- [ ] Progress bar animates from full to empty over 5 seconds\n- [ ] Download button appears automatically after countdown ends\n- [ ] Panel collapses to compact Ko-Fi link after countdown ends\n- [ ] Loading a new PDF hides the donate panel and download button\n- [ ] Generating a second PDF restarts the countdown from 5\n\n**Verify:** Load PDF, select preset, click generate. Panel shows \"5\", counts down, download appears after 5 s. Load new PDF — panel gone.\n\n```json:metadata\n{\"files\": [\"app.js\"], \"verifyCommand\": \"open index.html — manual browser test\", \"acceptanceCriteria\": [\"countdown 5→0 visible\", \"download auto-unlocks\", \"panel resets on new file\", \"second generation restarts countdown\"], \"modelTier\": \"mechanical\"}\n```"
+    }
+  ],
+  "lastUpdated": "2026-06-22"
+}
