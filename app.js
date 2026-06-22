@@ -1,5 +1,7 @@
 /* PDF Tiler - local processing only
-   Loads pdf-lib either from ./vendor/pdf-lib.min.js (preferred) or from a CDN fallback.
+   Uses pdf-lib for writing the output PDF.
+   Uses pdf.js (pdfjs-dist) to rasterize input pages reliably (keeps form fields/annotations/layers visible).
+   Loads libs either from ./vendor (preferred) or from a CDN fallback.
 */
 
 const el = (id) => document.getElementById(id);
@@ -24,6 +26,7 @@ const overlapEl = el('overlap');
 let loadedBytes = null;
 let loadedName = 'input.pdf';
 let PDFLib = null;
+let PDFJS = null;
 
 function mmToPt(mm) {
   return (mm * 72) / 25.4;
@@ -88,32 +91,58 @@ function applyOutPreset() {
 async function loadPdfLib() {
   if (PDFLib) return PDFLib;
 
-  // Prefer locally hosted vendor file
-  const localUrl = './vendor/pdf-lib.min.js';
-  const cdnUrl = 'https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js';
+  PDFLib = await new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = './vendor/pdf-lib.min.js';
+    s.async = true;
+    s.onload = () => {
+      if (window.PDFLib) resolve(window.PDFLib);
+      else reject(new Error('PDFLib nicht gefunden nach Script-Load.'));
+    };
+    s.onerror = () => reject(new Error('pdf-lib.min.js nicht gefunden. Bitte vendor/-Ordner prüfen.'));
+    document.head.appendChild(s);
+  });
+  return PDFLib;
+}
 
-  async function tryLoad(url) {
-    return new Promise((resolve, reject) => {
-      const s = document.createElement('script');
-      s.src = url;
-      s.async = true;
-      s.onload = () => {
-        if (window.PDFLib) resolve(window.PDFLib);
-        else reject(new Error('PDFLib nicht gefunden nach Script-Load.'));
-      };
-      s.onerror = () => reject(new Error('Script konnte nicht geladen werden: ' + url));
-      document.head.appendChild(s);
-    });
-  }
+async function loadPdfJs() {
+  if (PDFJS) return PDFJS;
 
-  try {
-    PDFLib = await tryLoad(localUrl);
-    return PDFLib;
-  } catch (e) {
-    // fallback to CDN
-    PDFLib = await tryLoad(cdnUrl);
-    return PDFLib;
-  }
+  PDFJS = await new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = './vendor/pdf.min.js';
+    s.async = true;
+    s.onload = () => {
+      if (window.pdfjsLib) resolve(window.pdfjsLib);
+      else reject(new Error('pdfjsLib nicht gefunden nach Script-Load.'));
+    };
+    s.onerror = () => reject(new Error('pdf.min.js nicht gefunden. Bitte vendor/-Ordner prüfen.'));
+    document.head.appendChild(s);
+  });
+
+  // Disable worker — no separate worker bundle needed.
+  try { PDFJS.GlobalWorkerOptions.workerSrc = ''; } catch (_) {}
+
+  return PDFJS;
+}
+
+async function canvasToPngBytes(canvas) {
+  const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+  if (!blob) throw new Error('Konnte Canvas nicht in PNG umwandeln.');
+  return await blob.arrayBuffer();
+}
+
+async function renderPageToPngBytes(pdfjsDoc, pageNumber, scale) {
+  const page = await pdfjsDoc.getPage(pageNumber);
+  const viewport = page.getViewport({ scale });
+
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d', { alpha: false });
+  canvas.width = Math.ceil(viewport.width);
+  canvas.height = Math.ceil(viewport.height);
+
+  await page.render({ canvasContext: ctx, viewport }).promise;
+  return await canvasToPngBytes(canvas);
 }
 
 async function handleSelectedFile(f) {
@@ -155,6 +184,7 @@ document.querySelectorAll('.pill[data-preset]').forEach(btn => {
     if (p === 'half_v') { rowsEl.value = 1; colsEl.value = 2; }
     if (p === 'quarter') { rowsEl.value = 2; colsEl.value = 2; }
     if (p === '3x3') { rowsEl.value = 3; colsEl.value = 3; }
+    if (p === 'custom') { rowsEl.focus(); rowsEl.select(); }
   });
 });
 
@@ -193,6 +223,9 @@ if (dropzoneEl) {
 generateBtn.addEventListener('click', async () => {
   if (!loadedBytes) return;
 
+  if (downloadA.href && downloadA.href.startsWith('blob:')) {
+    URL.revokeObjectURL(downloadA.href);
+  }
   downloadA.style.display = 'none';
   downloadA.removeAttribute('href');
 
@@ -212,18 +245,43 @@ generateBtn.addEventListener('click', async () => {
     const PDFLib = await loadPdfLib();
     const { PDFDocument } = PDFLib;
 
+    // For maximum reliability we rasterize input pages with pdf.js.
+    // This preserves anything the viewer would show: form fields, annotations, optional content (layers), etc.
+    const PDFJS = await loadPdfJs();
+
+    // Load source PDF for geometry (page sizes) with pdf-lib
     const srcDoc = await PDFDocument.load(loadedBytes, { ignoreEncryption: false });
     const srcPages = srcDoc.getPages();
     const maxPage = srcPages.length;
 
     const pageIdx = parsePageRanges(pagesEl.value, maxPage);
 
+    // Load the same PDF into pdf.js for rendering
+    setStatus('Rendere PDF (Raster) …');
+    const pdfjsDoc = await PDFJS.getDocument({ data: loadedBytes, disableWorker: true }).promise;
+
     const outDoc = await PDFDocument.create();
     let totalOutPages = 0;
+
+    // Cache rendered PNGs per page index to avoid re-rendering
+    const pagePngCache = new Map(); // key: 0-based page index, value: { pngBytes, W, H }
+
+    // Quality: scale 3 means ~216 DPI relative to PDF points (72 dpi baseline). Good for labels.
+    const rasterScale = 3;
 
     for (const pi of pageIdx) {
       const p = srcPages[pi];
       const { width: W, height: H } = p.getSize();
+
+      let cached = pagePngCache.get(pi);
+      if (!cached) {
+        setStatus(`Rendere Seite ${pi + 1}/${maxPage} …`);
+        const pngBytes = await renderPageToPngBytes(pdfjsDoc, pi + 1, rasterScale);
+        cached = { pngBytes, W, H };
+        pagePngCache.set(pi, cached);
+      }
+
+      const img = await outDoc.embedPng(cached.pngBytes);
 
       const tileW = W / cols;
       const tileH = H / rows;
@@ -257,13 +315,6 @@ generateBtn.addEventListener('click', async () => {
           const clipW = Math.max(1, clipRight - clipLeft);
           const clipH = Math.max(1, clipTop - clipBottom);
 
-          const embedded = await outDoc.embedPage(p, {
-            left: clipLeft,
-            right: clipRight,
-            bottom: clipBottom,
-            top: clipTop,
-          });
-
           let scale = 1;
           if (scaleMode === 'fit') scale = Math.min(innerW / clipW, innerH / clipH);
           if (scaleMode === 'fill') scale = Math.max(innerW / clipW, innerH / clipH);
@@ -275,8 +326,16 @@ generateBtn.addEventListener('click', async () => {
           const x = marginPt + (innerW - drawW) / 2;
           const y = marginPt + (innerH - drawH) / 2;
 
+          // Draw the FULL page image, but shift it so that the desired clip region lands inside the output page.
+          // Anything outside the page boundary is simply not visible, effectively cropping.
           const outPage = outDoc.addPage([outWPt, outHPt]);
-          outPage.drawPage(embedded, { x, y, width: drawW, height: drawH });
+
+          const fullW = W * scale;
+          const fullH = H * scale;
+          const xImg = x - clipLeft * scale;
+          const yImg = y - clipBottom * scale;
+
+          outPage.drawImage(img, { x: xImg, y: yImg, width: fullW, height: fullH });
 
           totalOutPages++;
         }
@@ -292,7 +351,7 @@ generateBtn.addEventListener('click', async () => {
     downloadA.download = `${baseName}_tiled.pdf`;
     downloadA.style.display = 'inline-block';
 
-    setStatus(`Fertig. Output: ${totalOutPages} Seite(n).`, 'ok');
+    setStatus(`Fertig. Output: ${totalOutPages} Seite(n). (Raster-Modus)`, 'ok');
   } catch (e) {
     console.error(e);
     setStatus(String(e?.message || e), 'err');
