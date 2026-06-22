@@ -1,0 +1,26 @@
+{
+  "planPath": "docs/superpowers/plans/2026-06-22-redesign.md",
+  "tasks": [
+    {
+      "id": 0,
+      "subject": "Task 0: CSS — full rewrite of style.css",
+      "status": "pending",
+      "description": "**Goal:** Replace every line of style.css with a token-based, light-only design system; remove all gradients, glassmorphism, and 999px pills.\n\n**Files:**\n- Modify: `style.css`\n\n**Acceptance Criteria:**\n- [ ] `style.css` contains `:root` with all design tokens\n- [ ] No `radial-gradient`, `backdrop-filter`, or `box-shadow` on buttons\n- [ ] No `border-radius: 999px`\n- [ ] Body background `#f1f5f9`; `.app` background `#ffffff`\n- [ ] `.status` uses `border-left: 3px solid` colouring\n- [ ] `.pill.active` and `.pill:hover` use indigo variants\n- [ ] New classes present: `.custom-fields`, `.format-strip`, `.format-custom`, `.toggle-btn`, `.erweitert-fields`\n- [ ] No `@media (prefers-color-scheme: light)` block\n\n**Verify:** `grep -n \"radial-gradient\\|backdrop-filter\\|999px\\|prefers-color-scheme\" style.css` → zero matches. Open in browser — body is light grey, app card is white.\n\n```json:metadata\n{\"files\": [\"style.css\"], \"verifyCommand\": \"grep -n 'radial-gradient\\\\|backdrop-filter\\\\|999px\\\\|prefers-color-scheme' style.css\", \"acceptanceCriteria\": [\"No radial-gradient, backdrop-filter, or 999px border-radius\", \"Body background #f1f5f9, .app background #ffffff\", \"Token-based :root block present\", \"New classes: .custom-fields, .format-strip, .format-custom, .toggle-btn, .erweitert-fields\"], \"modelTier\": \"standard\"}\n```"
+    },
+    {
+      "id": 1,
+      "subject": "Task 1: HTML — restructure index.html",
+      "status": "pending",
+      "blockedBy": [0],
+      "description": "**Goal:** Update HTML to match new design — simplified header, progressive disclosure markup, format strip, Erweitert toggle, GitHub footer.\n\n**Files:**\n- Modify: `index.html`\n\n**Acceptance Criteria:**\n- [ ] Header: wordmark h1 with `.app-title-accent` span, badge — no version, no description paragraph\n- [ ] Zeilen/Spalten/Seiten wrapped in `#splitCustomFields` div with class `custom-fields`\n- [ ] Preset pill for custom reads `Eigene … ▾`\n- [ ] `<select id=\"outPreset\">` replaced by `.format-strip` with four `data-format` buttons\n- [ ] W/H inputs in `#formatCustomFields` with class `format-custom`\n- [ ] Rand + Überlappung in `#erweiterFields`, preceded by `#erweiterToggle` button\n- [ ] Status element has class `status` (not `status-pill`)\n- [ ] Footer version is `<a href=\"https://github.com/si0nDE/cutpdf.app\" …>`\n\n**Verify:** Open `index.html` in browser — header shows wordmark + badge, format buttons visible in a row, Rand/Überlappung not visible (JS not wired yet).\n\n```json:metadata\n{\"files\": [\"index.html\"], \"verifyCommand\": \"open index.html\", \"acceptanceCriteria\": [\"Header has wordmark and badge only\", \"splitCustomFields div present\", \"format-strip with four data-format buttons present\", \"formatCustomFields div present\", \"erweiterToggle button and erweiterFields div present\", \"Status class is 'status' not 'status-pill'\", \"Footer version links to GitHub\"], \"modelTier\": \"standard\"}\n```"
+    },
+    {
+      "id": 2,
+      "subject": "Task 2: JS — wire progressive disclosure and format strip",
+      "status": "pending",
+      "blockedBy": [1],
+      "description": "**Goal:** Update app.js so all new interactive elements work: preset pills show/hide custom fields, format buttons replace the old select, Erweitert toggle reveals rand/overlap, generate handler reads new state.\n\n**Files:**\n- Modify: `app.js`\n\n**Acceptance Criteria:**\n- [ ] Clicking non-custom preset hides `#splitCustomFields`; clicking `data-preset=\"custom\"` shows it and focuses rows\n- [ ] Format buttons manage `.active` class; Kachelgröße active by default\n- [ ] `#formatCustomFields` hidden by default; shown only when `data-format=\"custom\"` active\n- [ ] Erweitert toggle shows/hides `#erweiterFields` and updates its own label\n- [ ] Generate handler uses `activeFormat` variable (not `outPresetEl`)\n- [ ] `setFileInfo` preserves `.file-info` base class\n\n**Verify:** Full manual flow in browser:\n1. Load PDF → indigo border on file-info\n2. Click 'Eigene … ▾' → rows/cols/pages appear\n3. Click 'Halbieren ↕' → rows/cols/pages disappear\n4. Click 'Eigenes …' format button → W/H inputs appear\n5. Click 'Kachelgröße' → W/H inputs disappear\n6. Click 'Erweitert ▾' → Rand/Überlappung appear, label becomes 'Erweitert ▴'\n7. Generate PDF with 2×2 split → download link appears with indigo status\n\n```json:metadata\n{\"files\": [\"app.js\"], \"verifyCommand\": \"open index.html\", \"acceptanceCriteria\": [\"Preset pills manage splitCustomFields visibility\", \"Format buttons manage formatCustomFields visibility\", \"activeFormat variable drives generate handler\", \"Erweitert toggle works\", \"setFileInfo preserves file-info class\"], \"modelTier\": \"standard\"}\n```"
+    }
+  ],
+  "lastUpdated": "2026-06-22"
+}
