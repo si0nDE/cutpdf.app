@@ -80,7 +80,7 @@ function startDonationCountdown() {
       downloadA.style.display = 'inline-block';
       downloadA.classList.add('btn--reveal');
       generateBtn.classList.add('secondary');
-      donatePanelEl.classList.add('donate-panel--done');
+      setTimeout(() => donatePanelEl.classList.add('donate-panel--done'), 1000);
     }
   }, 1000);
 }
