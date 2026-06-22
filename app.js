@@ -116,8 +116,7 @@ async function loadPdfJs() {
     document.head.appendChild(s);
   });
 
-  // Disable worker — no separate worker bundle needed.
-  try { PDFJS.GlobalWorkerOptions.workerSrc = ''; } catch (_) {}
+  try { PDFJS.GlobalWorkerOptions.workerSrc = './vendor/pdf.worker.min.js'; } catch (_) {}
 
   return PDFJS;
 }
