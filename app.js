@@ -22,6 +22,10 @@ const scaleModeEl = el('scaleMode');
 const marginEl = el('margin');
 const overlapEl = el('overlap');
 
+const donatePanelEl  = el('donate-panel');
+const donateBarEl    = el('donate-bar');
+const donateCountEl  = el('donate-countdown');
+
 const splitCustomEl    = el('splitCustomFields');
 const formatCustomEl   = el('formatCustomFields');
 const erweiterFieldsEl = el('erweiterFields');
@@ -47,6 +51,28 @@ function setStatus(msg, kind = '') {
 function setFileInfo(msg, kind = '') {
   fileInfoEl.className = 'file-info' + (kind ? ' ' + kind : '');
   fileInfoEl.textContent = msg;
+}
+
+function startDonationCountdown() {
+  donatePanelEl.hidden = false;
+  donatePanelEl.classList.remove('donate-panel--done');
+  donateBarEl.style.transform = 'scaleX(1)';
+  downloadA.style.display = 'none';
+
+  let remaining = 5;
+  donateCountEl.textContent = remaining;
+
+  const tick = setInterval(() => {
+    remaining -= 1;
+    donateBarEl.style.transform = `scaleX(${remaining / 5})`;
+    donateCountEl.textContent = remaining > 0 ? remaining : '';
+
+    if (remaining <= 0) {
+      clearInterval(tick);
+      downloadA.style.display = 'inline-flex';
+      donatePanelEl.classList.add('donate-panel--done');
+    }
+  }, 1000);
 }
 
 function clampInt(n, min, max) {
@@ -144,6 +170,8 @@ async function renderPageToPngBytes(pdfjsDoc, pageNumber, scale) {
 async function handleSelectedFile(f) {
   downloadA.style.display = 'none';
   downloadA.removeAttribute('href');
+  donatePanelEl.hidden = true;
+  donatePanelEl.classList.remove('donate-panel--done');
   generateBtn.disabled = true;
   loadedBytes = null;
   loadedName = 'input.pdf';
@@ -377,7 +405,7 @@ generateBtn.addEventListener('click', async () => {
     const baseName = (loadedName || 'input.pdf').replace(/\.pdf$/i, '');
     downloadA.href = url;
     downloadA.download = `${baseName}_tiled.pdf`;
-    downloadA.style.display = 'inline-block';
+    startDonationCountdown();
 
     setStatus(`Fertig. Output: ${totalOutPages} Seite(n). (Raster-Modus)`, 'ok');
   } catch (e) {
