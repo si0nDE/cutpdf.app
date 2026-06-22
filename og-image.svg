@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#f1f5f9"/>
+  <!-- White card -->
+  <rect x="60" y="60" width="1080" height="510" rx="24" fill="#ffffff"/>
+  <!-- App title: "cut" black + "pdf" indigo + ".app" black -->
+  <text
+    x="600"
+    y="320"
+    text-anchor="middle"
+    font-family="system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
+    font-weight="800"
+    font-size="112"
+    fill="#111827"
+  >cut<tspan fill="#4f46e5">pdf</tspan>.app</text>
+  <!-- Tagline -->
+  <text
+    x="600"
+    y="415"
+    text-anchor="middle"
+    font-family="system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
+    font-size="34"
+    fill="#6b7280"
+  >PDF schneiden im Browser · kein Upload · kostenlos</text>
+</svg>
