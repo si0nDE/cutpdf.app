@@ -364,6 +364,14 @@ select { width: 100%; }
   animation: btn-reveal 0.4s ease-out forwards;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .btn--reveal {
+    animation: none;
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 /* ── Status ─────────────────────────────────────────────────── */
 .status {
   display: block;
