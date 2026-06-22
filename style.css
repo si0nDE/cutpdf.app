@@ -472,5 +472,6 @@ select { width: 100%; }
 
 .donate-panel--done .donate-bar-track { display: none; }
 .donate-panel--done .donate-countdown { display: none; }
+.donate-panel--done .donate-actions { justify-content: flex-end; }
 
 .footer-version:hover { color: var(--color-accent); text-decoration: underline; }
