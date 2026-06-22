@@ -371,6 +371,19 @@ select { width: 100%; }
 .status.ok  { border-left-color: var(--color-accent); color: var(--color-accent-dark); background: var(--color-accent-bg); }
 .status.err { border-left-color: #ef4444; color: #b91c1c; background: #fef2f2; }
 
+/* ── Accessibility ──────────────────────────────────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ── Footer ─────────────────────────────────────────────────── */
 .app-footer {
   padding: 10px 24px;

@@ -48,7 +48,7 @@
           <button class="pill" data-preset="half_v" type="button">Halbieren ↔</button>
           <button class="pill" data-preset="quarter" type="button">2 × 2</button>
           <button class="pill" data-preset="3x3" type="button">3 × 3</button>
-          <button class="pill" data-preset="custom" type="button">Eigene … ▾</button>
+          <button class="pill" data-preset="custom" type="button" aria-expanded="false" aria-controls="splitCustomFields">Eigene … ▾</button>
         </div>
 
         <div class="custom-fields" id="splitCustomFields">
@@ -82,9 +82,11 @@
         </div>
 
         <div class="format-custom" id="formatCustomFields">
-          <input id="outW" type="number" min="10" step="1" value="100" />
+          <label for="outW" class="sr-only">Breite</label>
+          <input id="outW" type="number" min="10" step="1" value="100" aria-label="Breite in mm" />
           <span class="small">mm</span>
-          <input id="outH" type="number" min="10" step="1" value="150" />
+          <label for="outH" class="sr-only">Höhe</label>
+          <input id="outH" type="number" min="10" step="1" value="150" aria-label="Höhe in mm" />
           <span class="small">mm</span>
         </div>
 
@@ -95,7 +97,7 @@
           <option value="100">Originalgröße (100%)</option>
         </select>
 
-        <button class="toggle-btn" id="erweiterToggle" type="button">Erweitert ▾</button>
+        <button class="toggle-btn" id="erweiterToggle" type="button" aria-expanded="false" aria-controls="erweiterFields">Erweitert ▾</button>
         <div class="erweitert-fields" id="erweiterFields">
           <div class="two">
             <div>
