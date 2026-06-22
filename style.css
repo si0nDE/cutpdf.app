@@ -406,4 +406,55 @@ select { width: 100%; }
   white-space: nowrap;
 }
 
+/* ── Donate Panel ──────────────────────────────────────────── */
+.donate-panel {
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: var(--color-accent-bg);
+  border: 1px solid var(--color-accent-border);
+  border-radius: var(--radius-md);
+}
+
+.donate-text {
+  margin: 0 0 10px;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  line-height: 1.4;
+}
+
+.donate-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.donate-btn { flex-shrink: 0; }
+
+.donate-countdown {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  min-width: 2ch;
+}
+
+.donate-bar-track {
+  margin-top: 10px;
+  height: 3px;
+  background: var(--color-accent-border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.donate-bar {
+  height: 100%;
+  width: 100%;
+  background: var(--color-accent);
+  transform-origin: left;
+  transition: transform 1s linear;
+}
+
+.donate-panel--done .donate-text { display: none; }
+.donate-panel--done .donate-bar-track { display: none; }
+.donate-panel--done .donate-countdown { display: none; }
+.donate-panel--done .donate-actions { justify-content: flex-end; }
+
 .footer-version:hover { color: var(--color-accent); text-decoration: underline; }
