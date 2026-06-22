@@ -33,6 +33,7 @@ const erweiterToggleEl = el('erweiterToggle');
 
 let activeFormat = 'tile';
 let splitSelected = false;
+let donateIntervalId = null;
 
 let loadedBytes = null;
 let loadedName = 'input.pdf';
@@ -54,6 +55,10 @@ function setFileInfo(msg, kind = '') {
 }
 
 function startDonationCountdown() {
+  if (donateIntervalId !== null) {
+    clearInterval(donateIntervalId);
+    donateIntervalId = null;
+  }
   donatePanelEl.hidden = false;
   donatePanelEl.classList.remove('donate-panel--done');
   donateBarEl.style.transform = 'scaleX(1)';
@@ -62,14 +67,15 @@ function startDonationCountdown() {
   let remaining = 5;
   donateCountEl.textContent = remaining;
 
-  const tick = setInterval(() => {
+  donateIntervalId = setInterval(() => {
     remaining -= 1;
     donateBarEl.style.transform = `scaleX(${remaining / 5})`;
     donateCountEl.textContent = remaining > 0 ? remaining : '';
 
     if (remaining <= 0) {
-      clearInterval(tick);
-      downloadA.style.display = 'inline-flex';
+      clearInterval(donateIntervalId);
+      donateIntervalId = null;
+      downloadA.style.display = 'inline-block';
       donatePanelEl.classList.add('donate-panel--done');
     }
   }, 1000);
