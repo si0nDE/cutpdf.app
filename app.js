@@ -65,12 +65,12 @@ function startDonationCountdown() {
   downloadA.style.display = 'none';
 
   let remaining = 5;
-  donateCountEl.textContent = remaining;
+  donateCountEl.textContent = `Herunterladen in ${remaining}`;
 
   donateIntervalId = setInterval(() => {
     remaining -= 1;
     donateBarEl.style.transform = `scaleX(${remaining / 5})`;
-    donateCountEl.textContent = remaining > 0 ? remaining : '';
+    donateCountEl.textContent = remaining > 0 ? `Herunterladen in ${remaining}` : '';
 
     if (remaining <= 0) {
       clearInterval(donateIntervalId);
@@ -79,6 +79,7 @@ function startDonationCountdown() {
       void downloadA.offsetWidth;
       downloadA.style.display = 'inline-block';
       downloadA.classList.add('btn--reveal');
+      generateBtn.classList.add('secondary');
       donatePanelEl.classList.add('donate-panel--done');
     }
   }, 1000);
@@ -182,6 +183,7 @@ async function handleSelectedFile(f) {
   if (donateIntervalId !== null) { clearInterval(donateIntervalId); donateIntervalId = null; }
   donatePanelEl.hidden = true;
   donatePanelEl.classList.remove('donate-panel--done');
+  generateBtn.classList.remove('secondary');
   generateBtn.disabled = true;
   loadedBytes = null;
   loadedName = 'input.pdf';
@@ -423,6 +425,7 @@ generateBtn.addEventListener('click', async () => {
     if (donateIntervalId !== null) { clearInterval(donateIntervalId); donateIntervalId = null; }
     donatePanelEl.hidden = true;
     donatePanelEl.classList.remove('donate-panel--done');
+    generateBtn.classList.remove('secondary');
     setStatus(String(e?.message || e), 'err');
   }
 });
