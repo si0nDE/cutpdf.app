@@ -16,12 +16,18 @@ const rowsEl = el('rows');
 const colsEl = el('cols');
 const pagesEl = el('pages');
 
-const outPresetEl = el('outPreset');
 const outWEl = el('outW');
 const outHEl = el('outH');
 const scaleModeEl = el('scaleMode');
 const marginEl = el('margin');
 const overlapEl = el('overlap');
+
+const splitCustomEl    = el('splitCustomFields');
+const formatCustomEl   = el('formatCustomFields');
+const erweiterFieldsEl = el('erweiterFields');
+const erweiterToggleEl = el('erweiterToggle');
+
+let activeFormat = 'tile';
 
 let loadedBytes = null;
 let loadedName = 'input.pdf';
@@ -38,7 +44,7 @@ function setStatus(msg, kind = '') {
 }
 
 function setFileInfo(msg, kind = '') {
-  fileInfoEl.className = 'status' + (kind ? ' ' + kind : '');
+  fileInfoEl.className = 'file-info' + (kind ? ' ' + kind : '');
   fileInfoEl.textContent = msg;
 }
 
@@ -77,16 +83,6 @@ function parsePageRanges(input, maxPage) {
   return arr;
 }
 
-function applyOutPreset() {
-  const v = outPresetEl.value;
-  const custom = (v === 'custom');
-  outWEl.disabled = !custom;
-  outHEl.disabled = !custom;
-
-  if (v === 'a4p') { outWEl.value = 210; outHEl.value = 297; }
-  if (v === 'a4l') { outWEl.value = 297; outHEl.value = 210; }
-  if (v === 'tile') { outWEl.disabled = true; outHEl.disabled = true; }
-}
 
 async function loadPdfLib() {
   if (PDFLib) return PDFLib;
@@ -180,16 +176,45 @@ fileEl.addEventListener('change', async () => {
 document.querySelectorAll('.pill[data-preset]').forEach(btn => {
   btn.addEventListener('click', () => {
     const p = btn.getAttribute('data-preset');
+
     if (p === 'half_h') { rowsEl.value = 2; colsEl.value = 1; }
     if (p === 'half_v') { rowsEl.value = 1; colsEl.value = 2; }
     if (p === 'quarter') { rowsEl.value = 2; colsEl.value = 2; }
-    if (p === '3x3') { rowsEl.value = 3; colsEl.value = 3; }
-    if (p === 'custom') { rowsEl.focus(); rowsEl.select(); }
+    if (p === '3x3')    { rowsEl.value = 3; colsEl.value = 3; }
+
+    document.querySelectorAll('.pill[data-preset]').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-expanded', 'false');
+    });
+    btn.classList.add('active');
+
+    const isCustom = p === 'custom';
+    splitCustomEl.classList.toggle('open', isCustom);
+    btn.setAttribute('aria-expanded', String(isCustom));
+    if (isCustom) { rowsEl.focus(); rowsEl.select(); }
   });
 });
 
-outPresetEl.addEventListener('change', applyOutPreset);
-applyOutPreset();
+document.querySelectorAll('.pill[data-format]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const f = btn.getAttribute('data-format');
+    activeFormat = f;
+
+    document.querySelectorAll('.pill[data-format]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    formatCustomEl.classList.toggle('open', f === 'custom');
+
+    if (f === 'a4p') { outWEl.value = 210; outHEl.value = 297; }
+    if (f === 'a4l') { outWEl.value = 297; outHEl.value = 210; }
+  });
+});
+
+erweiterToggleEl.addEventListener('click', () => {
+  const open = erweiterFieldsEl.classList.toggle('open');
+  erweiterToggleEl.textContent = open ? 'Erweitert ▴' : 'Erweitert ▾';
+  erweiterToggleEl.setAttribute('aria-expanded', String(open));
+});
 
 if (dropzoneEl) {
   const prevent = (e) => { e.preventDefault(); e.stopPropagation(); };
@@ -287,7 +312,7 @@ generateBtn.addEventListener('click', async () => {
       const tileH = H / rows;
 
       let outWPt, outHPt;
-      if (outPresetEl.value === 'tile') {
+      if (activeFormat === 'tile') {
         outWPt = tileW;
         outHPt = tileH;
       } else {
