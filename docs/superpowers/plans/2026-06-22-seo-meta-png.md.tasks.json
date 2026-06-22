@@ -1,0 +1,19 @@
+{
+  "planPath": "docs/superpowers/plans/2026-06-22-seo-meta-png.md",
+  "tasks": [
+    {
+      "id": 0,
+      "subject": "Task 0: Add author + theme-color meta tags",
+      "status": "pending",
+      "description": "**Goal:** Add `<meta name=\"author\">` and `<meta name=\"theme-color\">` to the `<head>` of index.html.\n\n**Files:**\n- Modify: `index.html` (after `<meta name=\"robots\">`, around line 9)\n\n**Acceptance Criteria:**\n- [ ] `<meta name=\"author\" content=\"Simon Fieber\" />` present in head\n- [ ] `<meta name=\"theme-color\" content=\"#4f46e5\" />` present in head\n- [ ] Both tags appear after `<meta name=\"robots\">` and before `<link rel=\"icon\">`\n- [ ] Changes committed\n\n**Verify:** `grep -n \"author\\|theme-color\" /Users/simon/Developer/cutpdf.app/index.html` → 2 lines containing author and theme-color\n\n**Steps:**\n- Insert after `<meta name=\"robots\" content=\"index,follow\" />`:\n```html\n  <meta name=\"author\" content=\"Simon Fieber\" />\n  <meta name=\"theme-color\" content=\"#4f46e5\" />\n```\n- Commit: `git add index.html && git commit -m \"feat: add author and theme-color meta tags\"`\n\n```json:metadata\n{\"files\": [\"index.html\"], \"verifyCommand\": \"grep -n 'author|theme-color' index.html\", \"acceptanceCriteria\": [\"meta name=author content=Simon Fieber present\", \"meta name=theme-color content=#4f46e5 present\", \"both after robots meta, before favicon link\", \"committed\"], \"modelTier\": \"mechanical\"}\n```"
+    },
+    {
+      "id": 1,
+      "subject": "Task 1: Generate og-image.png + update og:image tags",
+      "status": "pending",
+      "blockedBy": [0],
+      "description": "**Goal:** Convert `og-image.svg` to `og-image.png` (1200×630) using the first available CLI tool, commit the PNG, and update og:image + og:image:type + twitter:image tags in index.html to reference the .png.\n\n**Files:**\n- Create: `og-image.png`\n- Modify: `index.html` (3 og:image tag changes)\n\n**Acceptance Criteria:**\n- [ ] `og-image.png` exists at repo root, is valid PNG, 1200×630 px\n- [ ] og:image tag references https://cutpdf.fieber-it.com/og-image.png\n- [ ] og:image:type tag has content=image/png\n- [ ] twitter:image tag references https://cutpdf.fieber-it.com/og-image.png\n- [ ] og-image.svg still present (untouched)\n- [ ] Both PNG and index.html changes committed\n\n**Verify:** `sips -g pixelWidth -g pixelHeight og-image.png` → pixelWidth: 1200, pixelHeight: 630\n\n**Steps:**\n1. Detect tool and generate PNG (fallback: rsvg-convert → inkscape → convert)\n2. Verify dimensions with sips\n3. Update 3 og:image tags from .svg to .png and image/svg+xml to image/png\n4. Commit: `git add og-image.png index.html && git commit -m \"feat: add og-image.png, switch og:image tags from SVG to PNG\"`\n\n```json:metadata\n{\"files\": [\"og-image.png\", \"index.html\"], \"verifyCommand\": \"sips -g pixelWidth -g pixelHeight og-image.png && grep -n 'og-image' index.html\", \"acceptanceCriteria\": [\"og-image.png is 1200x630 PNG\", \"og:image references .png not .svg\", \"og:image:type is image/png\", \"twitter:image references .png\", \"og-image.svg still exists\", \"committed\"], \"modelTier\": \"mechanical\"}\n```"
+    }
+  ],
+  "lastUpdated": "2026-06-22"
+}

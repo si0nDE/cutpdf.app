@@ -1,0 +1,33 @@
+{
+  "planPath": "docs/superpowers/plans/2026-06-22-seo-vollausbau.md",
+  "tasks": [
+    {
+      "id": 0,
+      "subject": "Task 0: index.html SEO Fixes",
+      "status": "pending",
+      "description": "**Goal:** Apply all technical SEO improvements to index.html and add .app-title-sub CSS to style.css.\n\n**Files:**\n- Modify: `index.html`\n- Modify: `style.css`\n\n**Acceptance Criteria:**\n- [ ] H1 ends with `<span class=\"app-title-sub\"> — PDF schneiden im Browser</span>`\n- [ ] `.app-title-sub` defined in style.css with `display: block`\n- [ ] `<meta property=\"og:image:alt\">` present in head\n- [ ] `<link rel=\"apple-touch-icon\" href=\"favicon.svg\" />` present\n- [ ] Two hreflang tags (de + x-default) present\n- [ ] FAQPage JSON-LD with 5 questions present\n- [ ] WebSite JSON-LD present\n- [ ] Internal links to etiketten/ and poster/ in use-case list\n\n**Verify:** `open index.html` → Rechtsklick → Seitenquelltext → prüfen: `og:image:alt`, `hreflang`, `FAQPage`, `WebSite`, Links\n\n```json:metadata\n{\"files\": [\"index.html\", \"style.css\"], \"verifyCommand\": \"open index.html\", \"acceptanceCriteria\": [\"H1 contains PDF schneiden im Browser\", \"og:image:alt present\", \"apple-touch-icon present\", \"hreflang de and x-default present\", \"FAQPage JSON-LD present with 5 questions\", \"WebSite JSON-LD present\", \"Links to etiketten/ and poster/ present\"], \"modelTier\": \"standard\"}\n```"
+    },
+    {
+      "id": 1,
+      "subject": "Task 1: /etiketten/ Landing Page",
+      "status": "pending",
+      "blockedBy": [0],
+      "description": "**Goal:** Create etiketten/index.html — a standalone SEO landing page for the shipping labels use case.\n\n**Files:**\n- Create: `etiketten/index.html`\n\n**Acceptance Criteria:**\n- [ ] H1: \"Versandetiketten aus A4-PDF freistellen\"\n- [ ] Title contains \"DHL/DPD/Hermes\" and \"cutpdf.app\"\n- [ ] Canonical: https://cutpdf.fieber-it.com/etiketten/\n- [ ] FAQPage JSON-LD with 5 questions present\n- [ ] WebPage JSON-LD with isPartOf present\n- [ ] Steps include 100x150 mm setting\n- [ ] CTA links to ../\n- [ ] Relative paths ../style.css and ../favicon.svg used\n- [ ] Page renders correctly in browser\n\n**Verify:** `open etiketten/index.html` → check layout → Seitenquelltext → confirm canonical and both JSON-LD blocks\n\n```json:metadata\n{\"files\": [\"etiketten/index.html\"], \"verifyCommand\": \"open etiketten/index.html\", \"acceptanceCriteria\": [\"H1 is Versandetiketten aus A4-PDF freistellen\", \"Canonical is https://cutpdf.fieber-it.com/etiketten/\", \"FAQPage JSON-LD present\", \"WebPage JSON-LD with isPartOf present\", \"Page renders without broken CSS\"], \"modelTier\": \"standard\"}\n```"
+    },
+    {
+      "id": 2,
+      "subject": "Task 2: /poster/ Landing Page",
+      "status": "pending",
+      "blockedBy": [0],
+      "description": "**Goal:** Create poster/index.html — a standalone SEO landing page for the poster/large format printing use case.\n\n**Files:**\n- Create: `poster/index.html`\n\n**Acceptance Criteria:**\n- [ ] H1: \"PDF als Poster auf mehrere A4-Seiten aufteilen\"\n- [ ] Title contains \"Poster\" and \"cutpdf.app\"\n- [ ] Canonical: https://cutpdf.fieber-it.com/poster/\n- [ ] FAQPage JSON-LD with 5 questions (incl. size calculation and overlap)\n- [ ] WebPage JSON-LD with isPartOf present\n- [ ] Steps mention Überlappung in Erweitert\n- [ ] CTA links to ../\n- [ ] Relative paths ../style.css and ../favicon.svg used\n- [ ] Page renders correctly in browser\n\n**Verify:** `open poster/index.html` → check layout → Seitenquelltext → confirm canonical and both JSON-LD blocks\n\n```json:metadata\n{\"files\": [\"poster/index.html\"], \"verifyCommand\": \"open poster/index.html\", \"acceptanceCriteria\": [\"H1 is PDF als Poster auf mehrere A4-Seiten aufteilen\", \"Canonical is https://cutpdf.fieber-it.com/poster/\", \"FAQPage JSON-LD present\", \"WebPage JSON-LD with isPartOf present\", \"Page renders without broken CSS\"], \"modelTier\": \"standard\"}\n```"
+    },
+    {
+      "id": 3,
+      "subject": "Task 3: Sitemap Update + Push",
+      "status": "pending",
+      "blockedBy": [1, 2],
+      "description": "**Goal:** Add /etiketten/ and /poster/ to sitemap.xml, validate XML, push all commits.\n\n**Files:**\n- Modify: `sitemap.xml`\n\n**Acceptance Criteria:**\n- [ ] https://cutpdf.fieber-it.com/etiketten/ present in sitemap.xml\n- [ ] https://cutpdf.fieber-it.com/poster/ present in sitemap.xml\n- [ ] xmllint --noout sitemap.xml exits 0\n- [ ] All commits pushed to origin/main\n\n**Verify:** `xmllint --noout sitemap.xml && echo \"valid\"` → output: `valid`\n\n```json:metadata\n{\"files\": [\"sitemap.xml\"], \"verifyCommand\": \"xmllint --noout sitemap.xml && echo valid\", \"acceptanceCriteria\": [\"etiketten/ URL in sitemap\", \"poster/ URL in sitemap\", \"xmllint exits 0\", \"git push succeeds\"], \"modelTier\": \"mechanical\"}\n```"
+    }
+  ],
+  "lastUpdated": "2026-06-22"
+}

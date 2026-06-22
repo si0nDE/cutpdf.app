@@ -1,0 +1,40 @@
+{
+  "planPath": "docs/superpowers/plans/2026-06-22-seo-launch.md",
+  "tasks": [
+    {
+      "id": 0,
+      "subject": "Task 0: Create robots.txt and sitemap.xml",
+      "status": "completed",
+      "description": "**Goal:** Create the two crawlability files so search engines can discover and index the site.\n\n**Files:**\n- Create: `robots.txt`\n- Create: `sitemap.xml`\n\n**Acceptance Criteria:**\n- [x] `robots.txt` exists at repo root, contains `Allow: /` and `Sitemap:` directive pointing to `https://cutpdf.fieber-it.com/sitemap.xml`\n- [x] `sitemap.xml` exists at repo root, is valid XML, contains `<loc>https://cutpdf.fieber-it.com/</loc>`\n- [x] Both files committed\n\n```json:metadata\n{\"files\": [\"robots.txt\", \"sitemap.xml\"], \"verifyCommand\": \"cat robots.txt sitemap.xml\", \"acceptanceCriteria\": [\"robots.txt contains Allow: / and Sitemap: https://cutpdf.fieber-it.com/sitemap.xml\", \"sitemap.xml contains loc https://cutpdf.fieber-it.com/\", \"both files committed\"], \"modelTier\": \"mechanical\"}\n```"
+    },
+    {
+      "id": 1,
+      "subject": "Task 1: Create favicon.svg",
+      "status": "completed",
+      "blockedBy": [],
+      "description": "**Goal:** Create an SVG favicon showing 'c' in dark and 'pdf' in indigo (#4f46e5), matching the app's visual identity.\n\n**Files:**\n- Create: `favicon.svg`\n\n**Acceptance Criteria:**\n- [x] `favicon.svg` exists at repo root\n- [x] SVG is 32×32 viewBox, white background with rounded corners (rx=6)\n- [x] 'c' text in #111827, 'pdf' text in #4f46e5\n- [x] File committed\n\n```json:metadata\n{\"files\": [\"favicon.svg\"], \"verifyCommand\": \"open favicon.svg\", \"acceptanceCriteria\": [\"favicon.svg exists at repo root\", \"SVG viewBox 0 0 32 32, white rect rx=6\", \"'c' in #111827, 'pdf' in #4f46e5\", \"file committed\"], \"modelTier\": \"mechanical\"}\n```"
+    },
+    {
+      "id": 2,
+      "subject": "Task 2: Create og-image.svg",
+      "status": "completed",
+      "blockedBy": [],
+      "description": "**Goal:** Create a 1200×630 SVG social-sharing image with 'cutpdf.app' title (pdf in indigo) and tagline.\n\n**Files:**\n- Create: `og-image.svg`\n\n**Acceptance Criteria:**\n- [x] `og-image.svg` exists at repo root\n- [x] viewBox is 0 0 1200 630\n- [x] Background #f1f5f9, white card with rounded corners\n- [x] Title 'cutpdf.app' with 'pdf' in #4f46e5, font-size 112\n- [x] Tagline 'PDF schneiden im Browser · kein Upload · kostenlos' in #6b7280\n- [x] File committed\n\n```json:metadata\n{\"files\": [\"og-image.svg\"], \"verifyCommand\": \"open og-image.svg\", \"acceptanceCriteria\": [\"og-image.svg exists at repo root\", \"viewBox 0 0 1200 630\", \"title with cutpdf.app two-tone text visible\", \"tagline visible below title\", \"file committed\"], \"modelTier\": \"mechanical\"}\n```"
+    },
+    {
+      "id": 3,
+      "subject": "Task 3: Update index.html head — canonical, meta tags, JSON-LD",
+      "status": "completed",
+      "blockedBy": [1, 2],
+      "description": "**Goal:** Fix the canonical URL to cutpdf.fieber-it.com and add all missing head tags: favicon link, complete Open Graph, Twitter Card, and JSON-LD WebApplication schema.\n\n**Files:**\n- Modify: `index.html` (head block)\n\n**Acceptance Criteria:**\n- [x] `<link rel='canonical' href='https://cutpdf.fieber-it.com/'>` present (not cutpdf.app)\n- [x] `<link rel='icon' type='image/svg+xml' href='favicon.svg'>` present\n- [x] og:url, og:locale, og:site_name, og:image all present\n- [x] twitter:card, twitter:title, twitter:description, twitter:image all present\n- [x] JSON-LD script block present with @type WebApplication\n- [x] Changes committed\n\n```json:metadata\n{\"files\": [\"index.html\"], \"verifyCommand\": \"grep -n 'canonical|favicon|og:url|twitter:card|WebApplication' index.html\", \"acceptanceCriteria\": [\"canonical href is https://cutpdf.fieber-it.com/\", \"favicon link tag present\", \"og:url og:locale og:site_name og:image present\", \"twitter card tags present\", \"JSON-LD WebApplication block present\", \"committed\"], \"modelTier\": \"mechanical\"}\n```"
+    },
+    {
+      "id": 4,
+      "subject": "Task 4: Update index.html body — add use-case section",
+      "status": "completed",
+      "blockedBy": [3],
+      "description": "**Goal:** Add a 'Wofür eignet sich cutpdf?' section to the right info card with 4 concrete use-case list items.\n\n**Files:**\n- Modify: `index.html` (right card, between 'Open Source' paragraph and 'cutpdf.app unterstützen' section)\n\n**Acceptance Criteria:**\n- [x] h2 'Wofür eignet sich cutpdf?' visible in right card\n- [x] 4 list items visible: Versandetiketten, Poster, Präsentationsfolien, splitten\n- [x] Section appears between 'Open Source' note and Ko-Fi support section\n- [x] Changes committed\n\n```json:metadata\n{\"files\": [\"index.html\"], \"verifyCommand\": \"grep -n 'Wofür eignet sich' index.html\", \"acceptanceCriteria\": [\"h2 'Wofür eignet sich cutpdf?' present in HTML\", \"4 list items present (Versandetiketten, Poster, Präsentationsfolien, splitten)\", \"section is between Open Source paragraph and unterstützen header\", \"committed\"], \"modelTier\": \"mechanical\"}\n```"
+    }
+  ],
+  "lastUpdated": "2026-06-22T14:01:00+02:00"
+}
