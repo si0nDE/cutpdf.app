@@ -176,6 +176,7 @@ async function renderPageToPngBytes(pdfjsDoc, pageNumber, scale) {
 async function handleSelectedFile(f) {
   downloadA.style.display = 'none';
   downloadA.removeAttribute('href');
+  if (donateIntervalId !== null) { clearInterval(donateIntervalId); donateIntervalId = null; }
   donatePanelEl.hidden = true;
   donatePanelEl.classList.remove('donate-panel--done');
   generateBtn.disabled = true;
@@ -416,6 +417,9 @@ generateBtn.addEventListener('click', async () => {
     setStatus(`Fertig. Output: ${totalOutPages} Seite(n). (Raster-Modus)`, 'ok');
   } catch (e) {
     console.error(e);
+    if (donateIntervalId !== null) { clearInterval(donateIntervalId); donateIntervalId = null; }
+    donatePanelEl.hidden = true;
+    donatePanelEl.classList.remove('donate-panel--done');
     setStatus(String(e?.message || e), 'err');
   }
 });
