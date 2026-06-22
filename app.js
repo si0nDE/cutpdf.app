@@ -75,7 +75,10 @@ function startDonationCountdown() {
     if (remaining <= 0) {
       clearInterval(donateIntervalId);
       donateIntervalId = null;
+      downloadA.classList.remove('btn--reveal');
+      void downloadA.offsetWidth;
       downloadA.style.display = 'inline-block';
+      downloadA.classList.add('btn--reveal');
       donatePanelEl.classList.add('donate-panel--done');
     }
   }, 1000);
