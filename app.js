@@ -75,12 +75,14 @@ function startDonationCountdown() {
     if (remaining <= 0) {
       clearInterval(donateIntervalId);
       donateIntervalId = null;
-      downloadA.classList.remove('btn--reveal');
-      void downloadA.offsetWidth;
-      downloadA.style.display = 'inline-block';
-      downloadA.classList.add('btn--reveal');
-      generateBtn.classList.add('secondary');
-      setTimeout(() => donatePanelEl.classList.add('donate-panel--done'), 1000);
+      setTimeout(() => {
+        downloadA.classList.remove('btn--reveal');
+        void downloadA.offsetWidth;
+        downloadA.style.display = 'inline-block';
+        downloadA.classList.add('btn--reveal');
+        generateBtn.classList.add('secondary');
+        donatePanelEl.classList.add('donate-panel--done');
+      }, 1000);
     }
   }, 1000);
 }
