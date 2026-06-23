@@ -94,6 +94,11 @@ a:hover { text-decoration: underline; }
   letter-spacing: normal;
 }
 
+details.note summary {
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .badge {
   display: inline-flex;
   align-items: center;
