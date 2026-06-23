@@ -63,6 +63,14 @@ a:hover { text-decoration: underline; }
 
 .app-title-accent { color: var(--color-accent); }
 
+.app-title-sub {
+  display: block;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0;
+  opacity: 0.6;
+}
+
 .badge {
   display: inline-flex;
   align-items: center;

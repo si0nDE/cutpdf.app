@@ -6,10 +6,13 @@
   <title>PDF schneiden und teilen im Browser | cutpdf.app</title>
   <meta name="description" content="PDF schneiden und teilen: halbieren, vierteln oder als Raster kacheln. Ideal für Labels. Läuft lokal im Browser, ohne Upload." />
   <link rel="canonical" href="https://cutpdf.fieber-it.com/" />
+  <link rel="alternate" hreflang="de" href="https://cutpdf.fieber-it.com/" />
+  <link rel="alternate" hreflang="x-default" href="https://cutpdf.fieber-it.com/" />
   <meta name="robots" content="index,follow" />
   <meta name="author" content="Simon Fieber" />
   <meta name="theme-color" content="#4f46e5" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="apple-touch-icon" href="favicon.svg" />
   <meta property="og:title" content="PDF schneiden und teilen im Browser | cutpdf.app" />
   <meta property="og:description" content="PDF schneiden und teilen: halbieren, vierteln oder als Raster kacheln. Ideal für Labels. Läuft lokal im Browser, ohne Upload." />
   <meta property="og:type" content="website" />
@@ -24,6 +27,7 @@
   <meta name="twitter:title" content="PDF schneiden im Browser | cutpdf.app" />
   <meta name="twitter:description" content="Halbieren, vierteln, kacheln — lokal, kein Upload." />
   <meta name="twitter:image" content="https://cutpdf.fieber-it.com/og-image.png" />
+  <meta property="og:image:alt" content="cutpdf.app — PDF schneiden und teilen im Browser, lokal ohne Upload" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -56,12 +60,70 @@
     }
   }
   </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Werden meine PDFs auf einen Server hochgeladen?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Nein. cutpdf läuft vollständig lokal im Browser. Deine Dateien verlassen nie dein Gerät — kein Upload, keine Cloud, kein Server."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Welche PDF-Formate werden unterstützt?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "cutpdf unterstützt Standard-PDF-Dateien. Das Tool kann PDFs halbieren (horizontal oder vertikal), vierteln (2×2), in beliebige Raster kacheln und auf Ausgabeformate wie A4 oder benutzerdefinierte Maße skalieren."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Wie erstelle ich Versandetiketten aus einem A4-PDF?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "PDF laden, 'Halbieren ↕' oder '2×2' wählen, dann Ausgabeformat auf 100×150 mm setzen (für DHL/DPD/Hermes-Labels). Anschließend PDF erzeugen und drucken."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Ist cutpdf kostenlos?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ja, cutpdf ist vollständig kostenlos und Open Source. Es gibt keine Konten, keine Abos und keine Werbung."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Wie teile ich ein großes PDF für den Posterdruck auf?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "PDF laden, gewünschtes Raster wählen (z. B. 3×3 für neun A4-Seiten), Ausgabeformat auf A4 hoch setzen, dann PDF erzeugen. Ideal zum Drucken von Postern oder Präsentationsfolien in Originalgröße."
+        }
+      }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "cutpdf.app",
+    "url": "https://cutpdf.fieber-it.com/",
+    "description": "PDF schneiden und teilen im Browser — lokal, ohne Upload, kostenlos.",
+    "inLanguage": "de"
+  }
+  </script>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="app">
     <header class="app-header">
-      <h1 class="app-title">cut<span class="app-title-accent">pdf</span>.app</h1>
+      <h1 class="app-title">cut<span class="app-title-accent">pdf</span><span class="app-title-sub"> — PDF schneiden im Browser</span></h1>
       <div class="badge">🔒 Lokal · keine Uploads</div>
     </header>
 
@@ -223,8 +285,8 @@
         </div>
 
         <ul class="note" style="margin:0; padding-left:18px;">
-          <li>Versandetiketten im Format 100 × 150 mm (DHL, DPD, Hermes) aus A4-PDFs freistellen</li>
-          <li>Großformatige Designs auf mehrere A4-Seiten aufteilen und als Poster drucken</li>
+          <li><a href="etiketten/">Versandetiketten</a> im Format 100 × 150 mm (DHL, DPD, Hermes) aus A4-PDFs freistellen</li>
+          <li>Großformatige Designs auf <a href="poster/">mehrere A4-Seiten aufteilen und als Poster drucken</a></li>
           <li>Präsentationsfolien oder Plakate in Kacheln zerschneiden</li>
           <li>Mehrseitige PDFs seitenweise splitten</li>
         </ul>
